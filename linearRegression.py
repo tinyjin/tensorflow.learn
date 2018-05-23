@@ -1,5 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
+import tensorflow as tf
 
 # create expreiment location for 'linearRegression' #
 
@@ -17,6 +18,31 @@ x_data = [v[0] for v in vectors_set]
 y_data = [v[1] for v in vectors_set]
 
 # show graph
-plt.plot(x_data, y_data, 'ro')
-plt.legend()
-plt.show()
+# plt.plot(x_data, y_data, 'ro')
+# plt.legend()
+# plt.show()
+
+
+# linearRegression learning model #
+
+W = tf.Variable(tf.random_uniform([1], -1.0, 1.0))
+b = tf.Variable(tf.zeros([1]))
+y = W * x_data + b
+
+
+loss = tf.reduce_mean(tf.square(y - y_data))
+
+optimizer = tf.train.GradientDescentOptimizer(0.5)
+train = optimizer.minimize(loss)
+
+# ready for learning
+
+init = tf.global_variables_initializer()
+
+sess = tf.Session()
+sess.run(init)
+
+# trainning
+for step in range(8) :
+    sess.run(train)
+    print(step, sess.run(W), sess.run(b))
